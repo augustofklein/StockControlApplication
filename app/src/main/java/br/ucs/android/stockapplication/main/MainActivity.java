@@ -1,4 +1,4 @@
-package br.ucs.android.stockapplication;
+package br.ucs.android.stockapplication.main;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
 
+import br.ucs.android.stockapplication.R;
 import br.ucs.android.stockapplication.database.*;
 import br.ucs.android.stockapplication.fragments.*;
 
