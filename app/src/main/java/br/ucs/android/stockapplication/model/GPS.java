@@ -13,8 +13,6 @@ import android.widget.Toast;
 
 import androidx.core.app.ActivityCompat;
 
-import br.ucs.android.stockapplication.Manifest;
-
 public class GPS {
 
     private String Latitude;
@@ -32,7 +30,7 @@ public class GPS {
     public String GetLongitude(){
         return this.Longitude;
     }
-
+/*
     public void PedirPermissoes() {
         if (ActivityCompat.checkSelfPermission(
                 this, Manifest.permission.ACCESS_FINE_LOCATION) !=
@@ -63,7 +61,6 @@ public class GPS {
         }
     }
 
-    /*
     public void atualizar(Location location)
     {
         Double latPoint = location.getLatitude();
@@ -71,6 +68,5 @@ public class GPS {
         txtLatitude.setText(latPoint.toString());
         txtLongitude.setText(lngPoint.toString());
     }
-    */
-
+*/
 }
