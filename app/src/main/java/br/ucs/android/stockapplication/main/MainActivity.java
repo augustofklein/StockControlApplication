@@ -9,6 +9,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
@@ -16,6 +17,7 @@ import com.google.android.material.navigation.NavigationView;
 import br.ucs.android.stockapplication.R;
 import br.ucs.android.stockapplication.database.*;
 import br.ucs.android.stockapplication.fragments.*;
+import br.ucs.android.stockapplication.model.Item;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -43,7 +45,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             navigationView.setCheckedItem(R.id.nav_home);
         }
 
-        //bd = new BDSQLiteHelper(this);
+        bd = new BDSQLiteHelper(this);
+
+//        Item item = new Item();
+//        item.setCodigo("123");
+//        item.setDescricao("TESTE");
+//        item.setQuantidade(2.0);
+//        item.setUnidade("UN");
+//        bd.addItem(item);
+
         //bd.getItem("1");
 
 
@@ -56,26 +66,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if(item.getItemId() == R.id.nav_home) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
         }
+        else if(item.getItemId() == R.id.nav_leitura) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new LeituraFragment(bd)).commit();
+        }
+        else if(item.getItemId() == R.id.nav_itens) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ItensFragment(bd)).commit();
+        }
         else if(item.getItemId() == R.id.nav_sair) {
             Toast.makeText(this, "Logout!", Toast.LENGTH_SHORT).show();
         }
 
-        /*
-        switch (item.getItemId()) {
-            case R.id.nav_home:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
-                break;
-            case R.id.nav_settings:
-                //getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new SettingsFragment()).commit();
-                break;
-            case R.id.nav_about:
-                //getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AboutFragment()).commit();
-                break;
-            case R.id.nav_sair:
-                Toast.makeText(this, "Logout!", Toast.LENGTH_SHORT).show();
-                break;
-        }
-        */
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
@@ -88,4 +88,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             super.onBackPressed();
         }
     }
+
+
 }

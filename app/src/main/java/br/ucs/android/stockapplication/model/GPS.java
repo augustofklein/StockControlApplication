@@ -13,7 +13,7 @@ import android.widget.Toast;
 
 import androidx.core.app.ActivityCompat;
 
-import br.ucs.android.stockapplication.Manifest;
+//import br.ucs.android.stock-application.Manifest;
 
 public class GPS {
 
@@ -32,7 +32,7 @@ public class GPS {
     public String GetLongitude(){
         return this.Longitude;
     }
-
+/*
     public void PedirPermissoes() {
         if (ActivityCompat.checkSelfPermission(
                 this, Manifest.permission.ACCESS_FINE_LOCATION) !=
@@ -62,7 +62,7 @@ public class GPS {
             Toast.makeText(this, ex.getMessage(), Toast.LENGTH_LONG).show();
         }
     }
-
+*/
     /*
     public void atualizar(Location location)
     {

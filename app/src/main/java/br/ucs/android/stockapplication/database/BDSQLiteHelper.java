@@ -38,8 +38,10 @@ public class BDSQLiteHelper extends SQLiteOpenHelper
     private static final String LEITURA_ITEM = "idItem";
     private static final String LEITURA_QUANTIDADE = "quantidade";
     private static final String LEITURA_DATA = "data";
+    private static final String LEITURA_LATITUDE = "latitude";
+    private static final String LEITURA_LONGITUDE = "longitude";
 
-    private static final String[] COLUNAS_LEITURA = {ID, LEITURA_ITEM, LEITURA_QUANTIDADE, LEITURA_DATA};
+    private static final String[] COLUNAS_LEITURA = {ID, LEITURA_ITEM, LEITURA_QUANTIDADE, LEITURA_DATA, LEITURA_LATITUDE, LEITURA_LONGITUDE};
 
 
 
@@ -63,7 +65,9 @@ public class BDSQLiteHelper extends SQLiteOpenHelper
                 ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 LEITURA_ITEM + " INTEGER, " +
                 LEITURA_DATA + " TEXT, " +
-                LEITURA_QUANTIDADE + " REAL " + ") ";
+                LEITURA_QUANTIDADE + " REAL, " +
+                LEITURA_LATITUDE + " REAL, " +
+                LEITURA_LONGITUDE + " REAL " + ") ";
         db.execSQL(CREATE_TABLE);
     }
 
@@ -131,7 +135,7 @@ public class BDSQLiteHelper extends SQLiteOpenHelper
 
     public ArrayList<Item> getAllItens() {
         ArrayList<Item> listaItens = new ArrayList<Item>();
-        String query = "SELECT " + COLUNAS_ITEM + " FROM " + TABELA_ITEM
+        String query = "SELECT * FROM " + TABELA_ITEM
                 + " ORDER BY " + ID + " DESC";
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(query, null);
@@ -172,6 +176,8 @@ public class BDSQLiteHelper extends SQLiteOpenHelper
         values.put(LEITURA_ITEM, leitura.getItem().getId());
         values.put(LEITURA_DATA, leitura.getData().getTime());
         values.put(LEITURA_QUANTIDADE, leitura.getQuantidade());
+        values.put(LEITURA_LATITUDE, leitura.getLatitude());
+        values.put(LEITURA_LONGITUDE, leitura.getLongitude());
         long id = db.insert(TABELA_LEITURA, null, values);
         db.close();
         return id;
@@ -183,6 +189,8 @@ public class BDSQLiteHelper extends SQLiteOpenHelper
         leitura.setItem(getItem(cursor.getInt(1)));
         leitura.setData(new Date(Long.parseLong(cursor.getString(2))));
         leitura.setQuantidade(cursor.getDouble(3));
+        leitura.setLatitude(cursor.getDouble(4));
+        leitura.setLongitude(cursor.getDouble(5));
         return leitura;
     }
 
@@ -237,6 +245,8 @@ public class BDSQLiteHelper extends SQLiteOpenHelper
         ContentValues values = new ContentValues();
         values.put(LEITURA_DATA, leitura.getData().getTime());
         values.put(LEITURA_QUANTIDADE, leitura.getQuantidade());
+        values.put(LEITURA_LATITUDE, leitura.getLatitude());
+        values.put(LEITURA_LONGITUDE, leitura.getLongitude());
         int i = db.update(TABELA_LEITURA, //tabela
                 values, // valores
                 ID + " = ?", // colunas para comparar
