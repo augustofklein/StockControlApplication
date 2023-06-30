@@ -13,8 +13,6 @@ import android.widget.Toast;
 
 import androidx.core.app.ActivityCompat;
 
-//import br.ucs.android.stock-application.Manifest;
-
 public class GPS {
 
     private String Latitude;
@@ -62,8 +60,7 @@ public class GPS {
             Toast.makeText(this, ex.getMessage(), Toast.LENGTH_LONG).show();
         }
     }
-*/
-    /*
+
     public void atualizar(Location location)
     {
         Double latPoint = location.getLatitude();
@@ -71,6 +68,5 @@ public class GPS {
         txtLatitude.setText(latPoint.toString());
         txtLongitude.setText(lngPoint.toString());
     }
-    */
-
+*/
 }
