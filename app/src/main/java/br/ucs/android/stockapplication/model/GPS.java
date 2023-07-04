@@ -15,6 +15,8 @@ import android.widget.Toast;
 
 import androidx.core.app.ActivityCompat;
 
+import br.ucs.android.stockapplication.main.MainActivity;
+
 public class GPS extends Activity {
 
     private Double Latitude;

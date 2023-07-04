@@ -70,9 +70,6 @@ public class LeituraFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-
-
-
     }
 
     @Override
@@ -90,6 +87,8 @@ public class LeituraFragment extends Fragment {
     private void setTextoGPSFields(LayoutInflater inflater, ViewGroup container, View view){
 
         GPS gps = new GPS();
+
+        //gps.PedirPermissoes(this.getContext());
 
         if(!gps.configurarServico(this.getContext())){
 
