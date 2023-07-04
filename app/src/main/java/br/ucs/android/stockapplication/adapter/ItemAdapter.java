@@ -1,13 +1,19 @@
 package br.ucs.android.stockapplication.adapter;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.List;
 
@@ -16,13 +22,12 @@ import br.ucs.android.stockapplication.database.BDSQLiteHelper;
 import br.ucs.android.stockapplication.model.Item;
 
 
-public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ArtigoViewHolder> {
+public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder> {
 
     private BDSQLiteHelper bd;
     private List<Item> itens;
     private int rowLayout;
     private Context context;
-
 
     public ItemAdapter(List<Item> itens, int rowLayout, Context context, BDSQLiteHelper bd) {
         this.itens = itens;
@@ -32,15 +37,18 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ArtigoViewHold
     }
 
     @Override
-    public ArtigoViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(rowLayout, parent, false);
-        return new ArtigoViewHolder(view);
+        return new ItemViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(ArtigoViewHolder holder, final int position) {
+    public void onBindViewHolder(ItemViewHolder holder, final int position) {
         holder.codigo.setText(itens.get(position).getCodigo());
-        holder.quantidade.setText(itens.get(position).getDescricao());
+        holder.quantidade.setText(itens.get(position).getQuantidade().toString() + " " + itens.get(position).getUnidade());
+        holder.descricao.setText(itens.get(position).getDescricao());
+
+
 
     }
 
@@ -49,13 +57,13 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ArtigoViewHold
         return itens.size();
     }
 
-    class ArtigoViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
+    class ItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
         LinearLayout itensLayout;
         TextView codigo;
         TextView quantidade;
         TextView descricao;
 
-        public ArtigoViewHolder(View v) {
+        public ItemViewHolder(View v) {
             super(v);
             v.setOnClickListener(this);
             v.setOnLongClickListener(this);
@@ -63,28 +71,52 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ArtigoViewHold
             codigo = (TextView) v.findViewById(R.id.tvCodigoItem);
             quantidade = (TextView) v.findViewById(R.id.tvQuantidadeItem);
             descricao = (TextView) v.findViewById(R.id.tvDescricaoItem);
+
         }
 
         @Override
         public void onClick(View view) {
-//            Intent intent = new Intent(context, WebviewActivity.class);
-//            intent.putExtra("URL", artigos.get(getLayoutPosition()).getUrl());
-//            intent.setFlags(FLAG_ACTIVITY_NEW_TASK);
-//            context.startActivity(intent);
+            Item item = itens.get(getLayoutPosition());
 
-            //Snackbar.make(view, "Você selecionou " + artigos.get(getLayoutPosition()).getTitle(), Snackbar.LENGTH_SHORT).show();
+
+
+            Snackbar.make(view, "Você selecionou " + item.getCodigo(), Snackbar.LENGTH_SHORT).show();
         }
 
 
         @Override
         public boolean onLongClick(View view) {
+            Item i = itens.get(getLayoutPosition());
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            builder
+                    .setTitle("Apagar Item")
+                    .setMessage("Deseja excluir o Item selecionado?")
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .setPositiveButton("Sim", new DialogInterface.OnClickListener()
+                    {
+                        public void onClick(DialogInterface dialog, int which)
+                        {
+                            bd.deleteItem(i.getId());
+                            itens.remove(getLayoutPosition());
+                            notifyDataSetChanged();
+                            dialog.dismiss();
+                        }
+                    });
+            builder.setNegativeButton("Não", new DialogInterface.OnClickListener()
+            {
+                public void onClick(DialogInterface dialog, int which)
+                {
+                    dialog.dismiss();
+                }
+            });
+            AlertDialog alert = builder.create();
+            alert.show();
+
 
             return true;
         }
 
-
-
     }
-
 
 }

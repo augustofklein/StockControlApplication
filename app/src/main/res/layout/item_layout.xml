@@ -46,15 +46,15 @@
         <TextView
             android:id="@+id/tvDescricaoItem"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
             android:text="Descrição"
             android:textSize="20sp" />
 
         <TextView
             android:id="@+id/textView3"
             android:layout_width="match_parent"
-            android:layout_height="1dp"
+            android:layout_height="2dp"
             android:layout_weight="1"
             android:background="@color/design_default_color_secondary_variant"
             android:text="TextView" />
