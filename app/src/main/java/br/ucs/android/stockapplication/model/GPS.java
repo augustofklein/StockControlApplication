@@ -2,6 +2,8 @@ package br.ucs.android.stockapplication.model;
 
 import static androidx.core.content.ContextCompat.getSystemService;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -13,60 +15,79 @@ import android.widget.Toast;
 
 import androidx.core.app.ActivityCompat;
 
-public class GPS {
+public class GPS extends Activity {
 
-    private String Latitude;
-    private String Longitude;
+    private Double Latitude;
+    private Double Longitude;
 
-    public GPS(String latitude, String longitude){
-        this.Latitude = latitude;
-        this.Longitude = longitude;
+    public GPS(){}
+
+    public Double getLatitude(){
+        if(this.Latitude == null){
+            return 0.0;
+        }else{
+            return this.Latitude;
+        }
     }
 
-    public String GetLatitude(){
-        return this.Latitude;
+    public Double getLongitude(){
+        if(this.Longitude == null){
+            return 0.0;
+        }else{
+            return this.getLongitude();
+        }
     }
 
-    public String GetLongitude(){
-        return this.Longitude;
-    }
-/*
-    public void PedirPermissoes() {
+    public void PedirPermissoes(Context context) {
         if (ActivityCompat.checkSelfPermission(
-                this, Manifest.permission.ACCESS_FINE_LOCATION) !=
+                context, Manifest.permission.ACCESS_FINE_LOCATION) !=
                 PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(
-                this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                context, Manifest.permission.ACCESS_COARSE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]
                     {Manifest.permission.ACCESS_FINE_LOCATION}, 1);
         } else
-            configurarServico();
+        if(!configurarServico(context)){
+            // MENSAGEM DE ERRO
+        }
     }
 
-    private void configurarServico(){
+    public boolean configurarServico(Context context){
         try {
-            LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+            LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
             LocationListener locationListener = new LocationListener() {
                 public void onLocationChanged(Location location) {
-                    //atualizar(location);
+                    AtualizarPosicao(location);
                 }
                 public void onStatusChanged(String provider, int status, Bundle extras) { }
                 public void onProviderEnabled(String provider) { }
                 public void onProviderDisabled(String provider) { }
             };
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+            return true;
         }catch(SecurityException ex){
-            Toast.makeText(this, ex.getMessage(), Toast.LENGTH_LONG).show();
+            return false;
         }
     }
 
-    public void atualizar(Location location)
+    public void AtualizarPosicao(Location location){
+        Latitude = location.getLatitude();
+        Longitude = location.getLongitude();
+    }
+
+    private Double ReturnLatitudeData(Location location)
     {
         Double latPoint = location.getLatitude();
-        Double lngPoint = location.getLongitude();
-        txtLatitude.setText(latPoint.toString());
-        txtLongitude.setText(lngPoint.toString());
+
+        return latPoint;
     }
-*/
+
+    private Double ReturnLongitudeData(Location location)
+    {
+        Double lonPoint = location.getLongitude();
+
+        return lonPoint;
+    }
+
 }

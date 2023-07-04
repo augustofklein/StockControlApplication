@@ -1,5 +1,9 @@
 package br.ucs.android.stockapplication.fragments;
 
+import static androidx.core.content.ContextCompat.getSystemService;
+
+import android.content.Context;
+import android.location.LocationManager;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -7,9 +11,12 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import br.ucs.android.stockapplication.R;
 import br.ucs.android.stockapplication.database.BDSQLiteHelper;
+import br.ucs.android.stockapplication.model.GPS;
+import br.ucs.android.stockapplication.model.Leitura;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -27,6 +34,10 @@ public class LeituraFragment extends Fragment {
     private String mParam1;
     private String mParam2;
     private BDSQLiteHelper bd;
+
+    private Leitura leitura;
+
+    //private TextView textResult;
 
     public LeituraFragment() { }
 
@@ -67,7 +78,27 @@ public class LeituraFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        View view = inflater.inflate(R.layout.fragment_leitura, container, false);
+
+        setTextoGPSFields(inflater, container, view);
+
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_leitura, container, false);
+        return view;
+    }
+
+    private void setTextoGPSFields(LayoutInflater inflater, ViewGroup container, View view){
+
+        GPS gps = new GPS();
+
+        if(!gps.configurarServico(this.getContext())){
+
+        }
+
+        TextView textResult = view.findViewById(R.id.etLongitude);
+        textResult.setText(gps.getLongitude().toString());
+
+        textResult = view.findViewById(R.id.etLatitude);
+        textResult.setText(gps.getLatitude().toString());
     }
 }

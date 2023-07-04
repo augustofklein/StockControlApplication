@@ -1,15 +1,22 @@
 package br.ucs.android.stockapplication.main;
 
+import static androidx.core.content.ContextCompat.getSystemService;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.FragmentTransaction;
 
+import android.Manifest;
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
@@ -17,7 +24,6 @@ import com.google.android.material.navigation.NavigationView;
 import br.ucs.android.stockapplication.R;
 import br.ucs.android.stockapplication.database.*;
 import br.ucs.android.stockapplication.fragments.*;
-import br.ucs.android.stockapplication.model.Item;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -66,14 +72,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if(item.getItemId() == R.id.nav_home) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
         }
-        else if(item.getItemId() == R.id.nav_leitura) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new LeituraFragment(bd)).commit();
-        }
-        else if(item.getItemId() == R.id.nav_itens) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ItensFragment(bd)).commit();
-        }
         else if(item.getItemId() == R.id.nav_sair) {
             Toast.makeText(this, "Logout!", Toast.LENGTH_SHORT).show();
+        }
+
+        if(item.getItemId() == R.id.nav_leitura) {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, new LeituraFragment()).commit();
         }
 
         drawerLayout.closeDrawer(GravityCompat.START);
@@ -88,6 +94,4 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             super.onBackPressed();
         }
     }
-
-
 }
