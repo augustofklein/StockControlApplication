@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:id="@+id/clItem"
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+tools:context=".main.ItemActivity">
+
+<TextView
+    android:id="@+id/tvIdItem"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginEnd="8dp"
+    android:visibility="invisible"
+    app:layout_constraintEnd_toStartOf="@+id/tilCodigo"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent" />
+
+<com.google.android.material.textfield.TextInputLayout
+    android:id="@+id/tilCodigo"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="8dp"
+    android:layout_marginTop="8dp"
+    android:layout_marginEnd="8dp"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent">
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/tietCodigo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Código" />
+</com.google.android.material.textfield.TextInputLayout>
+
+<com.google.android.material.textfield.TextInputLayout
+    android:id="@+id/tilDescricao"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="8dp"
+    android:layout_marginTop="4dp"
+    android:layout_marginEnd="8dp"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/tilCodigo">
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/tietDescricao"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Descrição"
+        android:inputType="text|textMultiLine"
+        android:lines="3" />
+</com.google.android.material.textfield.TextInputLayout>
+
+<LinearLayout
+    android:id="@+id/llQuantidade"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginStart="8dp"
+    android:layout_marginEnd="8dp"
+    android:orientation="horizontal"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/tilDescricao">
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilQuantidade"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:hint="Quantidade">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/tietQuantidade"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="2dp"
+            android:inputType="number|numberDecimal" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilUnidade"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:hint="Unidade">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/tietUnidade"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="2dp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+</LinearLayout>
+
+<LinearLayout
+    android:id="@+id/llComandos"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginStart="8dp"
+    android:layout_marginTop="16dp"
+    android:layout_marginEnd="8dp"
+    android:layout_marginBottom="16dp"
+    android:layout_weight="1"
+    android:orientation="horizontal"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/llQuantidade">
+
+    <Button
+        android:id="@+id/bCancelarItem"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="4dp"
+        android:layout_weight="1"
+        android:backgroundTint="@color/material_dynamic_neutral50"
+        android:text="Cancelar"
+        android:textSize="24sp" />
+
+    <Button
+        android:id="@+id/bSalvarItem"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_weight="1"
+        android:text="Salvar"
+        android:textSize="24sp" />
+
+</LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,8 +1,11 @@
 package br.ucs.android.stockapplication.adapter;
 
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
+
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +22,7 @@ import java.util.List;
 
 import br.ucs.android.stockapplication.R;
 import br.ucs.android.stockapplication.database.BDSQLiteHelper;
+import br.ucs.android.stockapplication.main.ItemActivity;
 import br.ucs.android.stockapplication.model.Item;
 
 
@@ -45,7 +49,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
     @Override
     public void onBindViewHolder(ItemViewHolder holder, final int position) {
         holder.codigo.setText(itens.get(position).getCodigo());
-        holder.quantidade.setText(itens.get(position).getQuantidade().toString() + " " + itens.get(position).getUnidade());
+        holder.quantidade.setText(itens.get(position).getQuantidade().toString() + itens.get(position).getUnidade());
         holder.descricao.setText(itens.get(position).getDescricao());
 
 
@@ -77,10 +81,10 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
         @Override
         public void onClick(View view) {
             Item item = itens.get(getLayoutPosition());
-
-
-
-            Snackbar.make(view, "Você selecionou " + item.getCodigo(), Snackbar.LENGTH_SHORT).show();
+            Intent intent = new Intent(context, ItemActivity.class);
+            intent.putExtra("ID", item.getId());
+            intent.setFlags(FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(intent);
         }
 
 

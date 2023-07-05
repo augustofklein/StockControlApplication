@@ -1,6 +1,9 @@
 package br.ucs.android.stockapplication.fragments;
 
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
+
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 
@@ -25,6 +28,7 @@ import java.util.ArrayList;
 import br.ucs.android.stockapplication.R;
 import br.ucs.android.stockapplication.adapter.ItemAdapter;
 import br.ucs.android.stockapplication.database.BDSQLiteHelper;
+import br.ucs.android.stockapplication.main.ItemActivity;
 import br.ucs.android.stockapplication.model.Item;
 
 /**
@@ -37,14 +41,6 @@ public class ItensFragment extends Fragment {
     public RecyclerView listaItens;
     public FloatingActionButton fabNovoItem;
 
-    public ConstraintLayout clItem;
-
-    public TextView tvIdItem;
-    public TextInputEditText etCodigo, etDescricao, etQuantidade, etUnidade;
-    public Button bSalvar;
-
-
-
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
@@ -54,12 +50,6 @@ public class ItensFragment extends Fragment {
     }
     public ItensFragment() { }
 
-    // TODO: Customize parameter initialization
-    @SuppressWarnings("unused")
-    public static ItensFragment newInstance(int columnCount) {
-        ItensFragment fragment = new ItensFragment();
-        return fragment;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -68,73 +58,30 @@ public class ItensFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
         View view = inflater.inflate(R.layout.fragment_itens, container, false);
 
-        clItem = (ConstraintLayout) view.findViewById(R.id.clItem);
-        clItem.setVisibility(View.GONE);
-
-        tvIdItem = (TextView) view.findViewById(R.id.tvIdItem);
-        etCodigo = (TextInputEditText) view.findViewById(R.id.tietCodigo);
-        etDescricao = (TextInputEditText) view.findViewById(R.id.tietDescricao);
-        etUnidade = (TextInputEditText) view.findViewById(R.id.tietUnidade);
-        etQuantidade = (TextInputEditText) view.findViewById(R.id.tietQuantidade);
 
         Context context = view.getContext();
         listaItens = (RecyclerView) view.findViewById(R.id.list);
         listaItens.setLayoutManager(new LinearLayoutManager(context));
         listaItens.setAdapter(new ItemAdapter(bd.getAllItens(), R.layout.item_layout, context, bd));
 
-
-
         fabNovoItem = view.findViewById(R.id.fabAdicionarItem);
         fabNovoItem.setOnClickListener(view1 -> {
-            listaItens.setBackgroundColor(Color.GRAY);
-            clItem.setVisibility(View.VISIBLE);
-            tvIdItem.setText("0");
+            Intent intent = new Intent(context, ItemActivity.class);
+            intent.setFlags(FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(intent);
         });
-
-
-        bSalvar = (Button) view.findViewById(R.id.bSalvarItem);
-        bSalvar.setOnClickListener(view1 -> salvarItem());
-
-
-
 
         return view;
     }
 
-    public void carregarItem(Item item)
-    {
-        tvIdItem.setText(item.getId());
-        etCodigo.setText(item.getCodigo());
-        etDescricao.setText(item.getDescricao());
-        etUnidade.setText(item.getUnidade());
-        etQuantidade.setText(item.getQuantidade().toString());
-        listaItens.setBackgroundColor(Color.GRAY);
-        clItem.setVisibility(View.VISIBLE);
-    }
+    @Override
+    public void onResume() {
+        super.onResume();
 
-    public void salvarItem()
-    {
-        Item item = new Item();
-        item.setCodigo(etCodigo.getText().toString());
-        item.setDescricao(etDescricao.getText().toString());
-        item.setUnidade(etUnidade.getText().toString());
-        item.setQuantidade(Double.parseDouble(etQuantidade.getText().toString()));
-
-        item.setId(Integer.parseInt(tvIdItem.getText().toString()));
-        if(item.getId() == 0) {
-            bd.addItem(item);
-        }
-        else {
-            bd.updateItem(item);
-        }
-
-        listaItens.setAdapter(new ItemAdapter(bd.getAllItens(), R.layout.item_layout, this.getContext(), bd));
-        listaItens.setBackgroundColor(Color.WHITE);
-        clItem.setVisibility(View.GONE);
-
+        listaItens.setAdapter(new ItemAdapter(bd.getAllItens(), R.layout.item_layout, getContext(), bd));
 
     }
-
 }

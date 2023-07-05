@@ -42,8 +42,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawerLayout = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open_nav,
-                R.string.close_nav);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open_nav, R.string.close_nav);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
         if (savedInstanceState == null) {
@@ -75,8 +74,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         else if(item.getItemId() == R.id.nav_sair) {
             Toast.makeText(this, "Logout!", Toast.LENGTH_SHORT).show();
         }
-
-        if(item.getItemId() == R.id.nav_leitura) {
+        else if(item.getItemId() == R.id.nav_itens) {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, new ItensFragment(bd)).commit();
+        }
+        else if(item.getItemId() == R.id.nav_leitura) {
             getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.fragment_container, new LeituraFragment()).commit();

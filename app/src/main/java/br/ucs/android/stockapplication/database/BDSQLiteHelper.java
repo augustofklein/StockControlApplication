@@ -106,7 +106,7 @@ public class BDSQLiteHelper extends SQLiteOpenHelper
     public Item getItem(String codigo) {
         SQLiteDatabase db = this.getReadableDatabase();
 
-        String query = "SELECT " + COLUNAS_ITEM + " FROM " + TABELA_ITEM
+        String query = "SELECT * FROM " + TABELA_ITEM
                 + " WHERE " + ITEM_CODIGO + " = '" + codigo + "'";
 
         Cursor cursor = db.rawQuery(query, null);
@@ -121,7 +121,7 @@ public class BDSQLiteHelper extends SQLiteOpenHelper
     public Item getItem(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
 
-        String query = "SELECT " + COLUNAS_ITEM + " FROM " + TABELA_ITEM
+        String query = "SELECT * FROM " + TABELA_ITEM
                 + " WHERE " + ID + " = '" + id + "'";
 
         Cursor cursor = db.rawQuery(query, null);
@@ -151,7 +151,10 @@ public class BDSQLiteHelper extends SQLiteOpenHelper
     public int updateItem(Item item) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
+        values.put(ITEM_CODIGO, item.getCodigo());
         values.put(ITEM_DESCRICAO, item.getDescricao());
+        values.put(ITEM_UNIDADE, item.getUnidade());
+        values.put(ITEM_QUANTIDADE, item.getQuantidade());
         int i = db.update(TABELA_ITEM, //tabela
                 values, // valores
                 ID + " = ?", // colunas para comparar
