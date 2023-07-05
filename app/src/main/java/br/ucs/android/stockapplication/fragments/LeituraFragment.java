@@ -11,7 +11,9 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import br.ucs.android.stockapplication.R;
 import br.ucs.android.stockapplication.database.BDSQLiteHelper;
@@ -37,12 +39,15 @@ public class LeituraFragment extends Fragment {
 
     private Leitura leitura;
 
-    //private TextView textResult;
+    private GPS gps = new GPS();
+
+    private ImageButton buttonCamera;
 
     public LeituraFragment() { }
 
-    public LeituraFragment(BDSQLiteHelper bd) {
+    public LeituraFragment(BDSQLiteHelper bd, GPS gps) {
         this.bd = bd;
+        this.gps = gps;
     }
 
     /**
@@ -78,22 +83,24 @@ public class LeituraFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_leitura, container, false);
 
-        setTextoGPSFields(inflater, container, view);
+        setTextoGPSFields(view);
+
+        buttonCamera = view.findViewById(R.id.imageButton);
+
+        buttonCamera.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View view) {
+                                                Toast.makeText(getContext(),"Clicou", Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
+
+        );
 
         // Inflate the layout for this fragment
         return view;
     }
 
-    private void setTextoGPSFields(LayoutInflater inflater, ViewGroup container, View view){
-
-        GPS gps = new GPS();
-
-        //gps.PedirPermissoes(this.getContext());
-
-        if(!gps.configurarServico(this.getContext())){
-
-        }
-
+    private void setTextoGPSFields(View view){
         TextView textResult = view.findViewById(R.id.etLongitude);
         textResult.setText(gps.getLongitude().toString());
 
