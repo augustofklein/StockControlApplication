@@ -3,6 +3,7 @@ package br.ucs.android.stockapplication.fragments;
 import static androidx.core.content.ContextCompat.getSystemService;
 
 import android.content.Context;
+import android.content.Intent;
 import android.location.LocationManager;
 import android.os.Bundle;
 
@@ -90,7 +91,11 @@ public class LeituraFragment extends Fragment {
         buttonCamera.setOnClickListener(new View.OnClickListener() {
                                             @Override
                                             public void onClick(View view) {
-                                                Toast.makeText(getContext(),"Clicou", Toast.LENGTH_SHORT).show();
+                                                Intent intent = new Intent(getContext(), PhotoActivity.class);
+
+                                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                                                getContext().startActivity(intent);
                                             }
                                         }
 
