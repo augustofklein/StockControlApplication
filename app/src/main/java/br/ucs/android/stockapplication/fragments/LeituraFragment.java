@@ -1,10 +1,6 @@
 package br.ucs.android.stockapplication.fragments;
 
-import static androidx.core.content.ContextCompat.getSystemService;
-
-import android.content.Context;
 import android.content.Intent;
-import android.location.LocationManager;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -14,10 +10,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import br.ucs.android.stockapplication.R;
 import br.ucs.android.stockapplication.database.BDSQLiteHelper;
+import br.ucs.android.stockapplication.main.PhotoActivity;
 import br.ucs.android.stockapplication.model.GPS;
 import br.ucs.android.stockapplication.model.Leitura;
 
