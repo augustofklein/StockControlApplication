@@ -11,7 +11,7 @@
     <ImageView
         android:id="@+id/imagem"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="200dp"
         tools:srcCompat="@tools:sample/backgrounds/scenic" />
 
     <GridLayout
@@ -20,7 +20,6 @@
         android:layout_height="wrap_content"
         android:columnCount="3"
         android:orientation="horizontal"
-        android:rowCount="8"
         android:useDefaultMargins="true"
         tools:context=".MainActivity">
 
@@ -34,17 +33,30 @@
             android:scaleType="centerInside" />
 
         <LinearLayout
-            android:orientation="vertical"
+            android:orientation="horizontal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_columnSpan="3">
 
             <Button
-                android:id="@+id/button8"
+                android:id="@+id/btnScan"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:onClick="tirarFoto"
-                android:text="Tirar foto" />
+                android:text="Scan"
+                android:layout_marginStart="4dp"
+                android:layout_weight="1"
+                android:textSize="24sp"/>
+
+            <Button
+                android:id="@+id/btnOk"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="ok"
+                android:text="Ok"
+                android:layout_marginStart="4dp"
+                android:layout_weight="1"
+                android:textSize="24sp"/>
 
         </LinearLayout>
 

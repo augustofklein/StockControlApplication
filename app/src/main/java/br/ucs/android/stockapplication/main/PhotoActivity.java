@@ -6,23 +6,35 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.mlkit.vision.barcode.BarcodeScanner;
+import com.google.mlkit.vision.barcode.BarcodeScanning;
+import com.google.mlkit.vision.barcode.common.Barcode;
+import com.google.mlkit.vision.common.InputImage;
+
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import br.ucs.android.stockapplication.R;
 
@@ -33,6 +45,8 @@ public class PhotoActivity extends AppCompatActivity {
     private final int CAMERA = 3;
     private File arquivoFoto = null;
     private ImageView imagem;
+    private ImageView barcodeImage;
+    private Button btnScan;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,7 +108,6 @@ public class PhotoActivity extends AppCompatActivity {
             );
             mostraFoto(arquivoFoto.getAbsolutePath());
         }
-
     }
 
     private void mostraFoto(String caminho) {
@@ -121,6 +134,34 @@ public class PhotoActivity extends AppCompatActivity {
                 startActivityForResult(takePictureIntent, CAMERA);
             }
         }
+    }
+
+    public void ok(View view){
+        btnScan = findViewById(R.id.btnScan);
+        barcodeImage = findViewById(R.id.imagem);
+        BitmapDrawable drawable = (BitmapDrawable) barcodeImage.getDrawable();
+        Bitmap bitmap = drawable.getBitmap();
+        InputImage image = InputImage.fromBitmap(bitmap, 0);
+        btnScan.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                BarcodeScanner barcodeScanner = BarcodeScanning.getClient();
+                barcodeScanner.process(image).addOnSuccessListener(new OnSuccessListener<List<Barcode>>() {
+                    @Override
+                    public void onSuccess(List<Barcode> barcodes) {
+                        for(Barcode barcode : barcodes){
+                            String barcodeData = barcode.getRawValue();
+                            Toast.makeText(PhotoActivity.this, barcodeData, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+
+                    }
+                });
+            }
+        });
     }
 
     private void mostraAlerta(String titulo, String mensagem) {
