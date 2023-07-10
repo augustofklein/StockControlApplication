@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -49,6 +50,13 @@ public class LeituraFragment extends Fragment {
     private ImageButton buttonCamera;
 
     private Button buttonSalvar;
+
+    private EditText codigoTela;
+    private EditText descricaoTela;
+    private EditText quantidadeTela;
+    private EditText unMedidaTela;
+    private EditText latitudeTela;
+    private EditText longitudeTela;
 
     public LeituraFragment() { }
 
@@ -94,6 +102,12 @@ public class LeituraFragment extends Fragment {
 
         buttonCamera = view.findViewById(R.id.imageButton);
         buttonSalvar = view.findViewById(R.id.btnSalvar);
+        codigoTela = view.findViewById(R.id.etCodigo);
+        descricaoTela = view.findViewById(R.id.etmlDescricao);
+        quantidadeTela = view.findViewById(R.id.etQuantidade);
+        unMedidaTela = view.findViewById(R.id.etUnidade);
+        latitudeTela = view.findViewById(R.id.etLatitude);
+        longitudeTela = view.findViewById(R.id.etLongitude);
 
         buttonCamera.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -107,15 +121,13 @@ public class LeituraFragment extends Fragment {
         buttonSalvar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                View viewSalvar = inflater.inflate(R.layout.fragment_leitura, container, false);
-
-                if(!validaInformacoesTela(viewSalvar)){
+                if(!validaInformacoesTela()){
                     return;
                 }
 
                 Leitura leitura = new Leitura();
-                leitura.setLatitude(gps.getLatitude());
-                leitura.setLongitude(gps.getLongitude());
+                leitura.setLatitude(Double.parseDouble(latitudeTela.getText().toString()));
+                leitura.setLongitude(Double.parseDouble(longitudeTela.getText().toString()));
                 Date dateObj = Calendar.getInstance().getTime();
                 leitura.setData(dateObj);
                 leitura.setItem(bd.getItem(view.findViewById(R.id.etCodigo).toString()));
@@ -136,33 +148,28 @@ public class LeituraFragment extends Fragment {
         textResult.setText(gps.getLatitude().toString());
     }
 
-    private boolean validaInformacoesTela(View view){
-        TextView textResult = view.findViewById(R.id.etCodigo);
-
-        if(textResult.getText().toString() != ""){
+    private boolean validaInformacoesTela(){
+        if(codigoTela.getText().toString().isEmpty()){
             Toast.makeText(getContext(), "Produto não informado!", Toast.LENGTH_SHORT).show();
             return false;
         }
 
-        if(!bd.verifyExistItem(view.findViewById(R.id.etCodigo).toString())){
+        if(!bd.verifyExistItem(codigoTela.getText().toString())){
             Toast.makeText(getContext(), "Produto não cadastrado!", Toast.LENGTH_SHORT).show();
             return false;
         }
 
-        textResult = view.findViewById(R.id.etmlDescricao);
-        if(textResult.getText().toString() != ""){
+        if(descricaoTela.getText().toString().isEmpty()){
             Toast.makeText(getContext(), "Descrição não informada!", Toast.LENGTH_SHORT).show();
             return false;
         }
 
-        textResult = view.findViewById(R.id.etQuantidade);
-        if(textResult.getText().toString() != ""){
+        if(quantidadeTela.getText().toString().isEmpty()){
             Toast.makeText(getContext(), "Quantidade não informada!", Toast.LENGTH_SHORT).show();
             return false;
         }
 
-        textResult = view.findViewById(R.id.etUnidade);
-        if(textResult.getText().toString() != ""){
+        if(unMedidaTela.getText().toString().isEmpty()){
             Toast.makeText(getContext(), "Unidade de medida não informada!", Toast.LENGTH_SHORT).show();
             return false;
         }
