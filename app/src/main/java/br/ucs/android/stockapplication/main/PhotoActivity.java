@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,51 +16,29 @@ import br.ucs.android.stockapplication.model.Capture;
 
 public class PhotoActivity extends AppCompatActivity {
     private MaterialButton btnScan;
+    private IntentResult intentResult;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_photo);
+        setContentView(R.layout.fragment_leitura);
 
-        btnScan = findViewById(R.id.btnScan);
+        IntentIntegrator intentIntegrator = new IntentIntegrator(PhotoActivity.this);
 
-        btnScan.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                IntentIntegrator intentIntegrator = new IntentIntegrator(PhotoActivity.this);
-
-                intentIntegrator.setPrompt("For flash use volume up key");
-
-                intentIntegrator.setBeepEnabled(true);
-                intentIntegrator.setOrientationLocked(true);
-                intentIntegrator.setCaptureActivity(Capture.class);
-                intentIntegrator.initiateScan();
-            }
-        });
+        intentIntegrator.setPrompt("For flash use volume up key");
+        intentIntegrator.setBeepEnabled(true);
+        intentIntegrator.setOrientationLocked(true);
+        intentIntegrator.setCaptureActivity(Capture.class);
+        intentIntegrator.initiateScan();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        IntentResult intentResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        intentResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
 
-        if(intentResult.getContents() != null){
-            AlertDialog.Builder builder = new AlertDialog.Builder(PhotoActivity.this);
-
-            builder.setTitle("Result");
-
-            builder.setMessage(intentResult.getContents());
-
-            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int i) {
-                    dialog.dismiss();
-                }
-            });
-            builder.show();
-        }else{
-            Toast.makeText(this, "OOOPS", Toast.LENGTH_SHORT).show();
-        }
+        TextView textResult = findViewById(R.id.etCodigo);
+        textResult.setText(intentResult.getContents());
     }
 }
