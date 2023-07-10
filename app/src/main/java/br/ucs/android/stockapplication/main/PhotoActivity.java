@@ -1,6 +1,7 @@
 package br.ucs.android.stockapplication.main;
 
 import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -23,12 +24,9 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.mlkit.vision.barcode.BarcodeScanner;
-import com.google.mlkit.vision.barcode.BarcodeScanning;
-import com.google.mlkit.vision.barcode.common.Barcode;
-import com.google.mlkit.vision.common.InputImage;
+import com.google.android.material.button.MaterialButton;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 
 import java.io.File;
 import java.io.IOException;
@@ -37,6 +35,7 @@ import java.util.Date;
 import java.util.List;
 
 import br.ucs.android.stockapplication.R;
+import br.ucs.android.stockapplication.model.Capture;
 
 public class PhotoActivity extends AppCompatActivity {
 
@@ -46,7 +45,7 @@ public class PhotoActivity extends AppCompatActivity {
     private File arquivoFoto = null;
     private ImageView imagem;
     private ImageView barcodeImage;
-    private Button btnScan;
+    private MaterialButton btnScan;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +76,22 @@ public class PhotoActivity extends AppCompatActivity {
                         new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSAO_REQUEST);
             }
         }
+
+        btnScan = findViewById(R.id.btnScan);
+
+        btnScan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                IntentIntegrator intentIntegrator = new IntentIntegrator(PhotoActivity.this);
+
+                intentIntegrator.setPrompt("For flash use volume up key");
+
+                intentIntegrator.setBeepEnabled(true);
+                intentIntegrator.setOrientationLocked(true);
+                intentIntegrator.setCaptureActivity(Capture.class);
+                intentIntegrator.initiateScan();
+            }
+        });
     }
 
     public void buscar(View view) {
@@ -88,26 +103,27 @@ public class PhotoActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK && requestCode == GALERIA_IMAGENS) {
-            Uri selectedImage = data.getData();
-            String[] filePath = {MediaStore.Images.Media.DATA};
-            Cursor c = getContentResolver().query(selectedImage, filePath, null,
-                    null, null);
-            c.moveToFirst();
-            int columnIndex = c.getColumnIndex(filePath[0]);
-            String picturePath = c.getString(columnIndex);
-            c.close();
-            arquivoFoto = new File(picturePath);
-            mostraFoto(arquivoFoto.getAbsolutePath());
+
+        IntentResult intentResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+
+        if(intentResult.getContents() != null){
+            AlertDialog.Builder builder = new AlertDialog.Builder(PhotoActivity.this);
+
+            builder.setTitle("Result");
+
+            builder.setMessage(intentResult.getContents());
+
+            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int i) {
+                    dialog.dismiss();
+                }
+            });
+            builder.show();
+        }else{
+            Toast.makeText(this, "OOOPS", Toast.LENGTH_SHORT).show();
         }
 
-        if (resultCode == RESULT_OK && requestCode == CAMERA) {
-            sendBroadcast(new Intent(
-                    Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,
-                    Uri.fromFile(arquivoFoto))
-            );
-            mostraFoto(arquivoFoto.getAbsolutePath());
-        }
     }
 
     private void mostraFoto(String caminho) {
@@ -134,34 +150,6 @@ public class PhotoActivity extends AppCompatActivity {
                 startActivityForResult(takePictureIntent, CAMERA);
             }
         }
-    }
-
-    public void ok(View view){
-        btnScan = findViewById(R.id.btnScan);
-        barcodeImage = findViewById(R.id.imagem);
-        BitmapDrawable drawable = (BitmapDrawable) barcodeImage.getDrawable();
-        Bitmap bitmap = drawable.getBitmap();
-        InputImage image = InputImage.fromBitmap(bitmap, 0);
-        btnScan.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view){
-                BarcodeScanner barcodeScanner = BarcodeScanning.getClient();
-                barcodeScanner.process(image).addOnSuccessListener(new OnSuccessListener<List<Barcode>>() {
-                    @Override
-                    public void onSuccess(List<Barcode> barcodes) {
-                        for(Barcode barcode : barcodes){
-                            String barcodeData = barcode.getRawValue();
-                            Toast.makeText(PhotoActivity.this, barcodeData, Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-
-                    }
-                });
-            }
-        });
     }
 
     private void mostraAlerta(String titulo, String mensagem) {
