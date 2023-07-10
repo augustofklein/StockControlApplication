@@ -8,50 +8,13 @@
     android:gravity="center"
     android:orientation="vertical">
 
-    <ImageView
-        android:id="@+id/imagem"
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnScan"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        tools:srcCompat="@tools:sample/backgrounds/scenic" />
-
-    <GridLayout
-        android:id="@+id/GridLayout1"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:columnCount="3"
-        android:orientation="horizontal"
-        android:useDefaultMargins="true"
-        tools:context=".MainActivity">
-
-        <com.github.chrisbanes.photoview.PhotoView
-            android:id="@+id/pv_image"
-            android:layout_width="324dp"
-            android:layout_height="439dp"
-            android:layout_rowSpan="7"
-            android:layout_columnSpan="3"
-            android:layout_gravity="fill_horizontal"
-            android:scaleType="centerInside" />
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_columnSpan="3">
-
-        </LinearLayout>
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnScan"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_row="0"
-            android:layout_column="1"
-            android:layout_marginStart="4dp"
-            android:layout_weight="1"
-            android:onClick="tirarFoto"
-            android:text="Scan"
-            android:textSize="24sp" />
-
-    </GridLayout>
+        android:onClick="tirarFoto"
+        android:text="Scan"
+        android:textSize="24sp" />
 
 </LinearLayout>
