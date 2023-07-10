@@ -88,9 +88,7 @@ public class LeituraFragment extends Fragment {
                                             @Override
                                             public void onClick(View view) {
                                                 Intent intent = new Intent(getContext(), PhotoActivity.class);
-
                                                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
                                                 getContext().startActivity(intent);
                                             }
                                         }

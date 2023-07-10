@@ -38,7 +38,12 @@ public class PhotoActivity extends AppCompatActivity {
 
         intentResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
 
-        TextView textResult = findViewById(R.id.etCodigo);
-        textResult.setText(intentResult.getContents());
+        if (intentResult.getContents() != null){
+            TextView textResult = findViewById(R.id.etCodigo);
+            textResult.setText(intentResult.getContents());
+        }else{
+            Toast.makeText(this, "Erro na leitura!", Toast.LENGTH_SHORT).show();
+        }
+
     }
 }
