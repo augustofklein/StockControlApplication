@@ -22,6 +22,7 @@
             android:layout_weight="1"
             android:ems="10"
             android:inputType="text"
+            android:hint="Código"
             android:textSize="34sp" />
 
         <ImageView
@@ -41,6 +42,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="3"
+            android:contentDescription="Clique para acessar a câmera"
             android:src="@android:drawable/ic_menu_camera" />
 
     </LinearLayout>
@@ -63,6 +65,7 @@
         android:ems="10"
         android:gravity="start|top"
         android:inputType="textMultiLine"
+        android:hint="Descrição"
         android:lines="3" />
 
     <LinearLayout
@@ -84,6 +87,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
+                android:hint="Código"
                 android:text="Quantidade" />
 
             <EditText
@@ -96,6 +100,7 @@
                 android:ems="10"
                 android:gravity="right"
                 android:inputType="number|numberDecimal"
+                android:hint="Quantidade"
                 android:textSize="24sp" />
         </LinearLayout>
 
@@ -124,6 +129,7 @@
                 android:layout_marginEnd="0dp"
                 android:ems="10"
                 android:inputType="text"
+                android:hint="Unidade"
                 android:textSize="24sp" />
         </LinearLayout>
 
@@ -155,6 +161,7 @@
             android:layout_weight="1"
             android:ems="10"
             android:enabled="false"
+            android:hint="Latitude"
             android:inputType="number|numberDecimal" />
 
         <EditText
@@ -164,6 +171,7 @@
             android:layout_weight="1"
             android:ems="10"
             android:enabled="false"
+            android:hint="Longitude"
             android:inputType="number|numberDecimal" />
 
     </LinearLayout>

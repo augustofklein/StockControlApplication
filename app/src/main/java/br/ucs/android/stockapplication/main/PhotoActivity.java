@@ -25,7 +25,7 @@ public class PhotoActivity extends AppCompatActivity {
 
         IntentIntegrator intentIntegrator = new IntentIntegrator(PhotoActivity.this);
 
-        intentIntegrator.setPrompt("For flash use volume up key");
+        intentIntegrator.setPrompt("Para acionar o flash utilize o botão de aumentar volume");
         intentIntegrator.setBeepEnabled(true);
         intentIntegrator.setOrientationLocked(true);
         intentIntegrator.setCaptureActivity(Capture.class);

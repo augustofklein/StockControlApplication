@@ -107,7 +107,9 @@ public class LeituraFragment extends Fragment {
         buttonSalvar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(!validaInformacoesTela(view)){
+                View viewSalvar = inflater.inflate(R.layout.fragment_leitura, container, false);
+
+                if(!validaInformacoesTela(viewSalvar)){
                     return;
                 }
 
@@ -135,7 +137,9 @@ public class LeituraFragment extends Fragment {
     }
 
     private boolean validaInformacoesTela(View view){
-        if(view.findViewById(R.id.etCodigo) == null){
+        TextView textResult = view.findViewById(R.id.etCodigo);
+
+        if(textResult.getText().toString() != ""){
             Toast.makeText(getContext(), "Produto não informado!", Toast.LENGTH_SHORT).show();
             return false;
         }
@@ -145,17 +149,20 @@ public class LeituraFragment extends Fragment {
             return false;
         }
 
-        if(view.findViewById(R.id.etmlDescricao) == null){
+        textResult = view.findViewById(R.id.etmlDescricao);
+        if(textResult.getText().toString() != ""){
             Toast.makeText(getContext(), "Descrição não informada!", Toast.LENGTH_SHORT).show();
             return false;
         }
 
-        if(view.findViewById(R.id.etQuantidade) == null){
+        textResult = view.findViewById(R.id.etQuantidade);
+        if(textResult.getText().toString() != ""){
             Toast.makeText(getContext(), "Quantidade não informada!", Toast.LENGTH_SHORT).show();
             return false;
         }
 
-        if(view.findViewById(R.id.etUnidade) == null){
+        textResult = view.findViewById(R.id.etUnidade);
+        if(textResult.getText().toString() != ""){
             Toast.makeText(getContext(), "Unidade de medida não informada!", Toast.LENGTH_SHORT).show();
             return false;
         }
