@@ -133,6 +133,21 @@ public class BDSQLiteHelper extends SQLiteOpenHelper
 
     }
 
+    public boolean verifyExistItem(String codigo){
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String query = "SELECT * FROM " + TABELA_ITEM
+                + " WHERE " + ITEM_CODIGO + " = '" + codigo + "'";
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        if(cursor.getCount() > 0){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
     public ArrayList<Item> getAllItens() {
         ArrayList<Item> listaItens = new ArrayList<Item>();
         String query = "SELECT * FROM " + TABELA_ITEM

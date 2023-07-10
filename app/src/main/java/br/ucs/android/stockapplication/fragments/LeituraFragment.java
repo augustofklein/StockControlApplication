@@ -8,8 +8,16 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.material.textfield.TextInputEditText;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 import br.ucs.android.stockapplication.R;
 import br.ucs.android.stockapplication.database.BDSQLiteHelper;
@@ -39,6 +47,8 @@ public class LeituraFragment extends Fragment {
     private GPS gps = new GPS();
 
     private ImageButton buttonCamera;
+
+    private Button buttonSalvar;
 
     public LeituraFragment() { }
 
@@ -83,19 +93,36 @@ public class LeituraFragment extends Fragment {
         setTextoGPSFields(view);
 
         buttonCamera = view.findViewById(R.id.imageButton);
+        buttonSalvar = view.findViewById(R.id.btnSalvar);
 
         buttonCamera.setOnClickListener(new View.OnClickListener() {
-                                            @Override
-                                            public void onClick(View view) {
-                                                Intent intent = new Intent(getContext(), PhotoActivity.class);
-                                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                                getContext().startActivity(intent);
-                                            }
-                                        }
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getContext(), PhotoActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                getContext().startActivity(intent);
+            }
+        });
 
-        );
+        buttonSalvar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(!validaInformacoesTela(view)){
+                    return;
+                }
 
-        // Inflate the layout for this fragment
+                Leitura leitura = new Leitura();
+                leitura.setLatitude(gps.getLatitude());
+                leitura.setLongitude(gps.getLongitude());
+                Date dateObj = Calendar.getInstance().getTime();
+                leitura.setData(dateObj);
+                leitura.setItem(bd.getItem(view.findViewById(R.id.etCodigo).toString()));
+                TextInputEditText quantidade = (TextInputEditText) view.findViewById(R.id.tietQuantidade);
+                leitura.setQuantidade(Double.parseDouble(quantidade.getText().toString()));
+                bd.addLeitura(leitura);
+            }
+        });
+
         return view;
     }
 
@@ -105,5 +132,34 @@ public class LeituraFragment extends Fragment {
 
         textResult = view.findViewById(R.id.etLatitude);
         textResult.setText(gps.getLatitude().toString());
+    }
+
+    private boolean validaInformacoesTela(View view){
+        if(view.findViewById(R.id.etCodigo) == null){
+            Toast.makeText(getContext(), "Produto não informado!", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        if(!bd.verifyExistItem(view.findViewById(R.id.etCodigo).toString())){
+            Toast.makeText(getContext(), "Produto não cadastrado!", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        if(view.findViewById(R.id.etmlDescricao) == null){
+            Toast.makeText(getContext(), "Descrição não informada!", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        if(view.findViewById(R.id.etQuantidade) == null){
+            Toast.makeText(getContext(), "Quantidade não informada!", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        if(view.findViewById(R.id.etUnidade) == null){
+            Toast.makeText(getContext(), "Unidade de medida não informada!", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        return true;
     }
 }
