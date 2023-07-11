@@ -2,20 +2,51 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/llHome"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
-    tools:context=".fragments.HomeFragment" >
+    tools:context=".fragments.HomeFragment">
 
-    <TextView
-        android:id="@+id/textView3"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilHomeItens"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="TextView" />
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:layout_weight="1"
+        android:enabled="false"
+        android:hint="Itens">
 
-    <TextView
-        android:id="@+id/textView4"
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etHomeItens"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="hint"
+            android:textAlignment="textEnd"
+            android:textSize="34sp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilHomeLeituras"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="TextView" />
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_weight="1"
+        android:enabled="false"
+        android:hint="Leituras">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etHomeLeituras"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="hint"
+            android:textAlignment="textEnd"
+            android:textSize="34sp" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
 </LinearLayout>

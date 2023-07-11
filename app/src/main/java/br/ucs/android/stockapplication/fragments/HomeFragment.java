@@ -1,14 +1,17 @@
 package br.ucs.android.stockapplication.fragments;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+
+import androidx.fragment.app.Fragment;
+
+import com.google.android.material.textfield.TextInputEditText;
 
 import br.ucs.android.stockapplication.R;
+import br.ucs.android.stockapplication.database.BDSQLiteHelper;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -25,10 +28,17 @@ public class HomeFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private BDSQLiteHelper bd;
+    private TextInputEditText etItens, etLeituras;
 
-    public HomeFragment() {
-        // Required empty public constructor
+    private Button btnAtualizarHome;
+
+    public HomeFragment() { }
+
+    public HomeFragment(BDSQLiteHelper bd) {
+        this.bd = bd;
     }
+
 
     /**
      * Use this factory method to create a new instance of
@@ -36,7 +46,7 @@ public class HomeFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment HomeFragment.
+     * @return A new instance of fragment LeituraFragment.
      */
     // TODO: Rename and change types and number of parameters
     public static HomeFragment newInstance(String param1, String param2) {
@@ -57,10 +67,25 @@ public class HomeFragment extends Fragment {
         }
     }
 
+
+
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_home, container, false);
+
+        etItens = view.findViewById(R.id.etHomeItens);
+        etLeituras = view.findViewById(R.id.etHomeLeituras);
+
+
+        if(this.bd == null)
+            this.bd = new BDSQLiteHelper(getContext());
+
+
+        etItens.setText(bd.getAllItens().size()+"");
+        etLeituras.setText(bd.getAllLeituras().size()+"");
+
+        return view;
     }
+
+
 }

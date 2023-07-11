@@ -49,10 +49,8 @@ public class LeituraFragment extends Fragment {
 
     private GPS gps = new GPS();
 
-    private ImageButton buttonCamera;
-
     private Button buttonSalvar, buttonLimpar;
-    private ImageView buttonBuscar;
+    private ImageView buttonBuscar, buttonCamera;
 
     private EditText codigoTela;
     private EditText descricaoTela;
@@ -100,8 +98,8 @@ public class LeituraFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_leitura, container, false);
 
-        latitudeTela = view.findViewById(R.id.etLatitude);
-        longitudeTela = view.findViewById(R.id.etLongitude);
+        latitudeTela = view.findViewById(R.id.etLatitudeLeitura);
+        longitudeTela = view.findViewById(R.id.etLongitudeLeitura);
 
         try {
             latitudeTela.setText(String.format("%.10f", gps.getLatitude()));
@@ -114,9 +112,9 @@ public class LeituraFragment extends Fragment {
         buttonLimpar = view.findViewById(R.id.btnLimpar);
         buttonSalvar = view.findViewById(R.id.btnSalvar);
         codigoTela = view.findViewById(R.id.etCodigo);
-        descricaoTela = view.findViewById(R.id.etmlDescricao);
-        quantidadeTela = view.findViewById(R.id.etQuantidade);
-        unMedidaTela = view.findViewById(R.id.etUnidade);
+        descricaoTela = view.findViewById(R.id.etDescricaoLeitura);
+        quantidadeTela = view.findViewById(R.id.etQuantidadeLeitura);
+        unMedidaTela = view.findViewById(R.id.etUnidadeLeitura);
 
         buttonBuscar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -185,7 +183,7 @@ public class LeituraFragment extends Fragment {
                 catch (InterruptedException ie) {}
                 catch (Exception e) {}
 
-                if(latitudeTela.getText().toString().isEmpty()) {
+                if(!latitudeTela.getText().toString().isEmpty()) {
                     leitura.setLatitude(Double.parseDouble(latitudeTela.getText().toString().replace(',', '.')));
                     leitura.setLongitude(Double.parseDouble(longitudeTela.getText().toString().replace(',', '.')));
                 }
@@ -216,7 +214,7 @@ public class LeituraFragment extends Fragment {
         quantidadeTela.setEnabled(true);
 
         if(bd == null) bd = new BDSQLiteHelper(getContext());
-        //if(gps == null) gps = new GPS();
+        if(gps == null) gps = new GPS();
 
         String codigo = codigoTela.getText().toString();
 
@@ -229,6 +227,7 @@ public class LeituraFragment extends Fragment {
                 codigo = retiraZeros(codigo);
                 item = bd.getItem(codigo);
                 if(item != null) {
+                    codigoTela.setText(codigo);
                     carregaItem(item);
                 }
                 else {
@@ -270,9 +269,9 @@ public class LeituraFragment extends Fragment {
     private void limparTela() {
 
         codigoTela.setText(null);
-        descricaoTela.setText(null);
-        quantidadeTela.setText(null);
-        unMedidaTela.setText(null);
+        descricaoTela.setText(" ");
+        quantidadeTela.setText(" ");
+        unMedidaTela.setText(" ");
 
         codigoTela.setEnabled(true);
         descricaoTela.setEnabled(false);

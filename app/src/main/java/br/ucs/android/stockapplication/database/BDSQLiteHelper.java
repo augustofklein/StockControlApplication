@@ -275,7 +275,7 @@ public class BDSQLiteHelper extends SQLiteOpenHelper
 
     public ArrayList<Leitura> getAllLeituras() {
         ArrayList<Leitura> listaItens = new ArrayList<Leitura>();
-        String query = "SELECT " + COLUNAS_LEITURA + " FROM " + TABELA_LEITURA
+        String query = "SELECT * FROM " + TABELA_LEITURA
                 + " ORDER BY " + ID + " DESC";
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(query, null);

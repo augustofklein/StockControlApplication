@@ -3,177 +3,159 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
     tools:context=".fragments.LeituraFragment">
-
-    <ImageButton
-        android:id="@+id/btnCamera"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:contentDescription="Clique para acessar a câmera"
-        android:src="@android:drawable/ic_menu_camera" />
 
     <LinearLayout
         android:id="@+id/llCodigo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_weight="1"
         android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/btnCamera"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="fill"
+            android:layout_weight="2"
+            android:contentDescription="Clique para acessar a câmera"
+            android:src="@android:drawable/ic_menu_camera" />
 
         <EditText
             android:id="@+id/etCodigo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="4dp"
             android:layout_weight="1"
             android:ems="10"
-            android:inputType="text"
             android:hint="Código"
-            android:textSize="34sp" />
+            android:inputType="text"
+            android:textAlignment="center"
+            android:textSize="30sp" />
 
         <ImageView
             android:id="@+id/btnBuscar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="fill_vertical"
+            android:layout_gravity="fill"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
-            android:layout_weight="3"
+            android:layout_weight="2"
             android:src="@android:drawable/ic_menu_search"
             android:visibility="visible"
             app:srcCompat="@android:drawable/ic_menu_search" />
 
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/tvDescricao"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilDescricaoLeitura"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="top"
         android:layout_marginStart="8dp"
-        android:text="Descrição" />
-
-    <EditText
-        android:id="@+id/etmlDescricao"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="0dp"
         android:layout_marginEnd="8dp"
-        android:editable="false"
-        android:ems="10"
-        android:gravity="start|top"
-        android:inputType="textMultiLine"
-        android:hint="Descrição"
-        android:lines="3" />
+        android:layout_weight="1"
+        android:gravity="top">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etDescricaoLeitura"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:gravity="top|left"
+            android:hint="Descrição"
+            android:inputType="text|textMultiLine"
+            android:lines="3"
+            android:text=" " />
+    </com.google.android.material.textfield.TextInputLayout>
 
     <LinearLayout
         android:id="@+id/lLinhalQuantidade"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_weight="1"
         android:orientation="horizontal">
 
-        <LinearLayout
-            android:id="@+id/llQuantidade"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilQuantidadeLeitura"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical">
+            android:layout_height="match_parent"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="4dp"
+            android:layout_weight="1">
 
-            <TextView
-                android:id="@+id/tvQuantidade"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etQuantidadeLeitura"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:hint="Código"
-                android:text="Quantidade" />
-
-            <EditText
-                android:id="@+id/etQuantidade"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="0dp"
-                android:layout_marginEnd="0dp"
-                android:ems="10"
-                android:gravity="right"
-                android:inputType="number|numberDecimal"
                 android:hint="Quantidade"
-                android:textSize="24sp" />
-        </LinearLayout>
+                android:inputType="number|numberDecimal"
+                android:text=" "
+                android:textAlignment="textEnd" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <LinearLayout
-            android:id="@+id/llUnidade"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilUnidadeLeitura"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="4dp"
             android:layout_marginEnd="8dp"
-            android:layout_weight="1.5"
-            android:orientation="vertical">
+            android:layout_weight="1">
 
-            <TextView
-                android:id="@+id/tvUnidade"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etUnidadeLeitura"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:text="Unidade de Medida" />
-
-            <EditText
-                android:id="@+id/etUnidade"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="0dp"
-                android:layout_marginEnd="0dp"
-                android:ems="10"
-                android:inputType="text"
-                android:hint="Unidade"
-                android:textSize="24sp" />
-        </LinearLayout>
+                android:layout_weight="1"
+                android:hint="Un. Medida"
+                android:text=" " />
+        </com.google.android.material.textfield.TextInputLayout>
 
     </LinearLayout>
-
-    <TextView
-        android:id="@+id/tvGps"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:gravity="center"
-        android:text="GPS - Latitude e Longitude" />
 
     <LinearLayout
         android:id="@+id/llGps"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="2dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginTop="4dp"
+        android:layout_weight="1"
         android:orientation="horizontal">
 
-        <EditText
-            android:id="@+id/etLatitude"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilLatitudeLeitura"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:ems="10"
-            android:enabled="false"
-            android:hint="Latitude"
-            android:inputType="number|numberDecimal"
-            android:textAlignment="textEnd" />
+            android:layout_height="match_parent"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="4dp"
+            android:layout_weight="1">
 
-        <EditText
-            android:id="@+id/etLongitude"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etLatitudeLeitura"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Latitude"
+                android:textAlignment="textEnd" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilLongitudeLeitura"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:ems="10"
-            android:enabled="false"
-            android:hint="Longitude"
-            android:inputType="number|numberDecimal"
-            android:textAlignment="textEnd" />
+            android:layout_height="match_parent"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="8dp"
+            android:layout_weight="1">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etLongitudeLeitura"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Longitude"
+                android:textAlignment="textEnd" />
+        </com.google.android.material.textfield.TextInputLayout>
 
     </LinearLayout>
 
@@ -181,6 +163,8 @@
         android:id="@+id/llComandosLeitura"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_weight="1"
         android:orientation="horizontal">
 
         <Button
@@ -189,7 +173,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="0dp"
             android:layout_weight="1"
             android:backgroundTint="@color/gray"
             android:text="Limpar"
@@ -201,7 +185,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="0dp"
             android:layout_marginEnd="8dp"
             android:layout_weight="1"
             android:text="Salvar"
