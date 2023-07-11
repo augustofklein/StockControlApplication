@@ -95,7 +95,6 @@ public class LeituraFragment extends Fragment {
         }
     }
 
-    @SuppressLint("MissingInflatedId")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -104,8 +103,11 @@ public class LeituraFragment extends Fragment {
         latitudeTela = view.findViewById(R.id.etLatitude);
         longitudeTela = view.findViewById(R.id.etLongitude);
 
-        //latitudeTela.setText(String.format("%.10f", gps.getLatitude()));
-        //longitudeTela.setText(String.format("%.10f", gps.getLongitude()));
+        try {
+            latitudeTela.setText(String.format("%.10f", gps.getLatitude()));
+            longitudeTela.setText(String.format("%.10f", gps.getLongitude()));
+        }
+        catch (Exception e) {}
 
         buttonBuscar = view.findViewById(R.id.btnBuscar);
         buttonCamera = view.findViewById(R.id.btnCamera);
@@ -169,15 +171,24 @@ public class LeituraFragment extends Fragment {
                 }
                 leitura.setItem(item);
 
-                leitura.setQuantidade(Double.parseDouble(quantidadeTela.getText().toString()));
+                leitura.setQuantidade(Double.parseDouble(quantidadeTela.getText().toString().replace(',', '.')));
 
 
-                latitudeTela.setText(String.format("%.10f", gps.getLatitude()));
-                longitudeTela.setText(String.format("%.10f", gps.getLongitude()));
 
-                leitura.setLatitude(Double.valueOf(latitudeTela.getText().toString()));
-                leitura.setLongitude(Double.valueOf(longitudeTela.getText().toString()));
+                try {
+                    if(latitudeTela.getText().toString().isEmpty()) {
+                        latitudeTela.setText(String.format("%.10f", gps.getLatitude()));
+                        longitudeTela.setText(String.format("%.10f", gps.getLongitude()));
+                        Thread.sleep(100);
+                    }
+                }
+                catch (InterruptedException ie) {}
+                catch (Exception e) {}
 
+                if(latitudeTela.getText().toString().isEmpty()) {
+                    leitura.setLatitude(Double.parseDouble(latitudeTela.getText().toString().replace(',', '.')));
+                    leitura.setLongitude(Double.parseDouble(longitudeTela.getText().toString().replace(',', '.')));
+                }
                 Date dateObj = Calendar.getInstance().getTime();
                 leitura.setData(dateObj);
 
@@ -205,29 +216,55 @@ public class LeituraFragment extends Fragment {
         quantidadeTela.setEnabled(true);
 
         if(bd == null) bd = new BDSQLiteHelper(getContext());
+        //if(gps == null) gps = new GPS();
 
-        if(!codigoTela.getText().toString().isEmpty()) {
-            Item item = bd.getItem(codigoTela.getText().toString());
-            if(item != null) {
-                descricaoTela.setText(item.getDescricao());
-                unMedidaTela.setText(item.getUnidade());
+        String codigo = codigoTela.getText().toString();
 
-                codigoTela.setEnabled(false);
-                descricaoTela.setEnabled(false);
-                unMedidaTela.setEnabled(false);
-                quantidadeTela.requestFocus();
+        if(!codigo.isEmpty()) {
+            Item item = bd.getItem(codigo);
+                if(item != null) {
+                carregaItem(item);
             }
             else {
-                Toast.makeText(getContext(), "Código não encontrado, informe descrição e unidade para inserir", Toast.LENGTH_LONG).show();
+                codigo = retiraZeros(codigo);
+                item = bd.getItem(codigo);
+                if(item != null) {
+                    carregaItem(item);
+                }
+                else {
+                    Toast.makeText(getContext(), "Código não encontrado, informe descrição e unidade para inserir", Toast.LENGTH_LONG).show();
 
-                codigoTela.setEnabled(true);
-                descricaoTela.setEnabled(true);
-                unMedidaTela.setEnabled(true);
-                descricaoTela.requestFocus();
+                    codigoTela.setEnabled(true);
+                    descricaoTela.setEnabled(true);
+                    unMedidaTela.setEnabled(true);
+                    descricaoTela.requestFocus();
+                }
             }
 
         }
 
+    }
+
+    private void carregaItem(Item item) {
+
+        descricaoTela.setText(item.getDescricao());
+        unMedidaTela.setText(item.getUnidade());
+
+        codigoTela.setEnabled(false);
+        descricaoTela.setEnabled(false);
+        unMedidaTela.setEnabled(false);
+        quantidadeTela.requestFocus();
+    }
+
+    private String retiraZeros(String valor) {
+        String retorno = "0";
+        for (int i = 0; i < valor.length(); i++) {
+            if (valor.charAt(i) != '0') {
+                retorno = valor.substring(i);
+                break;
+            }
+        }
+        return retorno;
     }
 
     private void limparTela() {
@@ -252,10 +289,11 @@ public class LeituraFragment extends Fragment {
             return false;
         }
 
+        /*
         if(!bd.verifyExistItem(codigoTela.getText().toString())){
             Toast.makeText(getContext(), "Produto não cadastrado!", Toast.LENGTH_SHORT).show();
             return false;
-        }
+        }*/
 
         if(descricaoTela.getText().toString().isEmpty()){
             Toast.makeText(getContext(), "Descrição não informada!", Toast.LENGTH_SHORT).show();
