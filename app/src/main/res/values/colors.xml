@@ -2,4 +2,14 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="gray">#878787</color>
+    <color name="purple">#D937F4</color>
+
+    <color name="gray_zerado">#C6C6C6</color>
+    <color name="green_ok">#28D804</color>
+    <color name="red_faltando">#E31F1F</color>
+    <color name="yellow_quase">#FFFF01</color>
+    <color name="blue_sobrando">#2432CD</color>
+
+
 </resources>

@@ -36,9 +36,6 @@
         android:theme="@style/Theme.StockApplication"
         tools:targetApi="31">
         <activity
-            android:name=".main.PhotoActivity"
-            android:exported="false" />
-        <activity
             android:name=".main.ItemActivity"
             android:exported="false" />
         <activity
@@ -50,11 +47,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".model.Capture"
-            android:screenOrientation="portrait"
-            android:stateNotNeeded="true"
-            android:theme="@style/zxing_CaptureTheme"/>
 
         <provider
             android:name="androidx.core.content.FileProvider"

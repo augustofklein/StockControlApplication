@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import br.ucs.android.stockapplication.model.Item;
+import br.ucs.android.stockapplication.model.ItemLista;
 import br.ucs.android.stockapplication.model.Leitura;
 
 public class BDSQLiteHelper extends SQLiteOpenHelper
@@ -103,6 +104,17 @@ public class BDSQLiteHelper extends SQLiteOpenHelper
         return item;
     }
 
+    private ItemLista cursorToItemLista(Cursor cursor) {
+        ItemLista item = new ItemLista();
+        item.setId(cursor.getInt(0));
+        item.setCodigo(cursor.getString(1));
+        item.setDescricao(cursor.getString(2));
+        item.setUnidade(cursor.getString(3));
+        item.setQuantidade(cursor.getDouble(4));
+        item.setQuantidadeLida(cursor.getDouble(5));
+        return item;
+    }
+
     public Item getItem(String codigo) {
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -157,6 +169,24 @@ public class BDSQLiteHelper extends SQLiteOpenHelper
         if (cursor.moveToFirst()) {
             do {
                 Item item = cursorToItem(cursor);
+                listaItens.add(item);
+            } while (cursor.moveToNext());
+        }
+        return listaItens;
+    }
+
+    public ArrayList<ItemLista> getAllItensLista() {
+        ArrayList<ItemLista> listaItens = new ArrayList<ItemLista>();
+        String query = "SELECT i.id, i.codigo, i.descricao, i.unidade, i.quantidade, SUM(l.quantidade) as quant "
+                + " FROM item AS i"
+                + " LEFT JOIN leitura as l on l.idItem = i.id "
+                + " GROUP BY i.id, i.codigo, i.descricao, i.unidade, i.quantidade "
+                + " ORDER BY i.id DESC";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor.moveToFirst()) {
+            do {
+                ItemLista item = cursorToItemLista(cursor);
                 listaItens.add(item);
             } while (cursor.moveToNext());
         }

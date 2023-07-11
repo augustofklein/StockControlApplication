@@ -65,7 +65,8 @@ public class ItensFragment extends Fragment {
         Context context = view.getContext();
         listaItens = (RecyclerView) view.findViewById(R.id.list);
         listaItens.setLayoutManager(new LinearLayoutManager(context));
-        listaItens.setAdapter(new ItemAdapter(bd.getAllItens(), R.layout.item_layout, context, bd));
+        listaItens.setAdapter(new ItemAdapter(bd.getAllItensLista(), R.layout.item_layout, context, bd));
+
 
         fabNovoItem = view.findViewById(R.id.fabAdicionarItem);
         fabNovoItem.setOnClickListener(view1 -> {
@@ -81,7 +82,7 @@ public class ItensFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        listaItens.setAdapter(new ItemAdapter(bd.getAllItens(), R.layout.item_layout, getContext(), bd));
+        listaItens.setAdapter(new ItemAdapter(bd.getAllItensLista(), R.layout.item_layout, getContext(), bd));
 
     }
 }

@@ -12,11 +12,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.google.android.material.snackbar.Snackbar;
-import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.List;
 
@@ -24,16 +20,17 @@ import br.ucs.android.stockapplication.R;
 import br.ucs.android.stockapplication.database.BDSQLiteHelper;
 import br.ucs.android.stockapplication.main.ItemActivity;
 import br.ucs.android.stockapplication.model.Item;
+import br.ucs.android.stockapplication.model.ItemLista;
 
 
 public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder> {
 
     private BDSQLiteHelper bd;
-    private List<Item> itens;
+    private List<ItemLista> itens;
     private int rowLayout;
     private Context context;
 
-    public ItemAdapter(List<Item> itens, int rowLayout, Context context, BDSQLiteHelper bd) {
+    public ItemAdapter(List<ItemLista> itens, int rowLayout, Context context, BDSQLiteHelper bd) {
         this.itens = itens;
         this.rowLayout = rowLayout;
         this.context = context;
@@ -48,11 +45,32 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
 
     @Override
     public void onBindViewHolder(ItemViewHolder holder, final int position) {
-        holder.codigo.setText(itens.get(position).getCodigo());
-        holder.quantidade.setText(itens.get(position).getQuantidade().toString() + itens.get(position).getUnidade());
-        holder.descricao.setText(itens.get(position).getDescricao());
+        ItemLista item = itens.get(position);
 
+        holder.tvCodigo.setText(item.getCodigo());
+        holder.tvQuantidade.setText(item.getQuantidadeLida().toString() + " de " + item.getQuantidade().toString() + " " + item.getUnidade() + "(s)");
+        holder.tvDescricao.setText(item.getDescricao());
 
+        double percent = item.getQuantidadeLida() / item.getQuantidade();
+
+        int cor = R.color.white;
+        if(percent == 0) {
+            cor = R.color.gray_zerado;
+        }
+        else if (percent < 0.8) {
+            cor = R.color.red_faltando;
+        }
+        else if (percent < 1) {
+            cor = R.color.yellow_quase;
+        }
+        else if(percent == 1) {
+            cor = R.color.green_ok;
+        }
+        else if(percent > 1) {
+            cor = R.color.blue_sobrando;
+        }
+
+        holder.tvCor.setBackgroundResource(cor);
 
     }
 
@@ -63,19 +81,17 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
 
     class ItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
         LinearLayout itensLayout;
-        TextView codigo;
-        TextView quantidade;
-        TextView descricao;
+        TextView tvCodigo, tvQuantidade, tvDescricao, tvCor;
 
         public ItemViewHolder(View v) {
             super(v);
             v.setOnClickListener(this);
             v.setOnLongClickListener(this);
             itensLayout = (LinearLayout) v.findViewById(R.id.item_layout);
-            codigo = (TextView) v.findViewById(R.id.tvCodigoItem);
-            quantidade = (TextView) v.findViewById(R.id.tvQuantidadeItem);
-            descricao = (TextView) v.findViewById(R.id.tvDescricaoItem);
-
+            tvCodigo = (TextView) v.findViewById(R.id.tvCodigoItem);
+            tvQuantidade = (TextView) v.findViewById(R.id.tvQuantidadeItem);
+            tvDescricao = (TextView) v.findViewById(R.id.tvDescricaoItem);
+            tvCor = (TextView) v.findViewById(R.id.tvCor);
         }
 
         @Override

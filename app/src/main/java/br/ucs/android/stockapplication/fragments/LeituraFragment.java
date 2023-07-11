@@ -1,8 +1,10 @@
 package br.ucs.android.stockapplication.fragments;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -11,19 +13,19 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.TextView;
+import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.google.android.material.textfield.TextInputEditText;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
 import br.ucs.android.stockapplication.R;
 import br.ucs.android.stockapplication.database.BDSQLiteHelper;
-import br.ucs.android.stockapplication.main.PhotoActivity;
 import br.ucs.android.stockapplication.model.GPS;
+import br.ucs.android.stockapplication.model.Item;
 import br.ucs.android.stockapplication.model.Leitura;
 
 /**
@@ -49,7 +51,8 @@ public class LeituraFragment extends Fragment {
 
     private ImageButton buttonCamera;
 
-    private Button buttonSalvar;
+    private Button buttonSalvar, buttonLimpar;
+    private ImageView buttonBuscar;
 
     private EditText codigoTela;
     private EditText descricaoTela;
@@ -92,29 +95,56 @@ public class LeituraFragment extends Fragment {
         }
     }
 
+    @SuppressLint("MissingInflatedId")
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_leitura, container, false);
 
-        setTextoGPSFields(view);
+        latitudeTela = view.findViewById(R.id.etLatitude);
+        longitudeTela = view.findViewById(R.id.etLongitude);
 
-        buttonCamera = view.findViewById(R.id.imageButton);
+        //latitudeTela.setText(String.format("%.10f", gps.getLatitude()));
+        //longitudeTela.setText(String.format("%.10f", gps.getLongitude()));
+
+        buttonBuscar = view.findViewById(R.id.btnBuscar);
+        buttonCamera = view.findViewById(R.id.btnCamera);
+        buttonLimpar = view.findViewById(R.id.btnLimpar);
         buttonSalvar = view.findViewById(R.id.btnSalvar);
         codigoTela = view.findViewById(R.id.etCodigo);
         descricaoTela = view.findViewById(R.id.etmlDescricao);
         quantidadeTela = view.findViewById(R.id.etQuantidade);
         unMedidaTela = view.findViewById(R.id.etUnidade);
-        latitudeTela = view.findViewById(R.id.etLatitude);
-        longitudeTela = view.findViewById(R.id.etLongitude);
+
+        buttonBuscar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                buscarItem();
+            }
+        });
 
         buttonCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getContext(), PhotoActivity.class);
+
+                /*Intent intent = new Intent(getContext(), ScanActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                getContext().startActivity(intent);
+                getContext().startActivity(intent);*/
+
+                IntentIntegrator scanIntegrator = IntentIntegrator.forSupportFragment(LeituraFragment.this);
+
+                scanIntegrator.setPrompt("Para acionar o flash utilize o botão de aumentar volume");
+                scanIntegrator.setBeepEnabled(true);
+                scanIntegrator.setOrientationLocked(false);
+                scanIntegrator.initiateScan();
+
+            }
+        });
+
+        buttonLimpar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                limparTela();
             }
         });
 
@@ -125,27 +155,95 @@ public class LeituraFragment extends Fragment {
                     return;
                 }
 
+                if(bd == null) bd = new BDSQLiteHelper(getContext());
+
                 Leitura leitura = new Leitura();
-                leitura.setLatitude(Double.parseDouble(latitudeTela.getText().toString()));
-                leitura.setLongitude(Double.parseDouble(longitudeTela.getText().toString()));
+
+                Item item = bd.getItem(codigoTela.getText().toString());
+                if(item == null) {
+                    item = new Item();
+                    item.setCodigo(codigoTela.getText().toString());
+                    item.setDescricao(descricaoTela.getText().toString());
+                    item.setUnidade(unMedidaTela.getText().toString());
+                    bd.addItem(item);
+                }
+                leitura.setItem(item);
+
+                leitura.setQuantidade(Double.parseDouble(quantidadeTela.getText().toString()));
+
+
+                latitudeTela.setText(String.format("%.10f", gps.getLatitude()));
+                longitudeTela.setText(String.format("%.10f", gps.getLongitude()));
+
+                leitura.setLatitude(Double.valueOf(latitudeTela.getText().toString()));
+                leitura.setLongitude(Double.valueOf(longitudeTela.getText().toString()));
+
                 Date dateObj = Calendar.getInstance().getTime();
                 leitura.setData(dateObj);
-                leitura.setItem(bd.getItem(view.findViewById(R.id.etCodigo).toString()));
-                TextInputEditText quantidade = (TextInputEditText) view.findViewById(R.id.tietQuantidade);
-                leitura.setQuantidade(Double.parseDouble(quantidade.getText().toString()));
+
                 bd.addLeitura(leitura);
+
+                limparTela();
             }
         });
 
         return view;
     }
 
-    private void setTextoGPSFields(View view){
-        TextView textResult = view.findViewById(R.id.etLongitude);
-        textResult.setText(gps.getLongitude().toString());
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
-        textResult = view.findViewById(R.id.etLatitude);
-        textResult.setText(gps.getLatitude().toString());
+        IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        if (scanResult != null) {
+            codigoTela.setText(scanResult.getContents());
+            buscarItem();
+        }
+    }
+
+    private void buscarItem() {
+        quantidadeTela.setEnabled(true);
+
+        if(bd == null) bd = new BDSQLiteHelper(getContext());
+
+        if(!codigoTela.getText().toString().isEmpty()) {
+            Item item = bd.getItem(codigoTela.getText().toString());
+            if(item != null) {
+                descricaoTela.setText(item.getDescricao());
+                unMedidaTela.setText(item.getUnidade());
+
+                codigoTela.setEnabled(false);
+                descricaoTela.setEnabled(false);
+                unMedidaTela.setEnabled(false);
+                quantidadeTela.requestFocus();
+            }
+            else {
+                Toast.makeText(getContext(), "Código não encontrado, informe descrição e unidade para inserir", Toast.LENGTH_LONG).show();
+
+                codigoTela.setEnabled(true);
+                descricaoTela.setEnabled(true);
+                unMedidaTela.setEnabled(true);
+                descricaoTela.requestFocus();
+            }
+
+        }
+
+    }
+
+    private void limparTela() {
+
+        codigoTela.setText(null);
+        descricaoTela.setText(null);
+        quantidadeTela.setText(null);
+        unMedidaTela.setText(null);
+
+        codigoTela.setEnabled(true);
+        descricaoTela.setEnabled(false);
+        quantidadeTela.setEnabled(false);
+        unMedidaTela.setEnabled(false);
+
+
+        codigoTela.requestFocus();
     }
 
     private boolean validaInformacoesTela(){

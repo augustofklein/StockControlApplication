@@ -33,18 +33,46 @@ public class GPS extends Activity {
     }
 
     public Double getLatitude(){
-        if(this.Latitude == null){
-            return 0.0;
-        }else{
-            return Latitude;
-        }
+        if(this.Latitude == null)
+            configurarServico();
+
+        return Latitude;
+
     }
 
     public Double getLongitude(){
-        if(this.Longitude == null){
-            return 0.0;
-        }else{
-            return Longitude;
+        if(this.Longitude == null)
+            configurarServico();
+
+        return Longitude;
+
+    }
+
+    public void configurarServico(){
+        try {
+            LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+            LocationListener locationListener = new LocationListener() {
+                public void onLocationChanged(Location location) {
+                    atualizar(location);
+                }
+
+                public void onStatusChanged(String provider, int status, Bundle extras) { }
+
+                public void onProviderEnabled(String provider) { }
+
+                public void onProviderDisabled(String provider) { }
+            };
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+        }catch(SecurityException ex){
+            Toast.makeText(this, ex.getMessage(), Toast.LENGTH_LONG).show();
         }
     }
+
+    public void atualizar(Location location)
+    {
+        this.setLatitude(location.getLatitude());
+        this.setLongitude(location.getLongitude());
+    }
+
 }

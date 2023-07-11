@@ -7,6 +7,13 @@
     android:orientation="vertical"
     tools:context=".fragments.LeituraFragment">
 
+    <ImageButton
+        android:id="@+id/btnCamera"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:contentDescription="Clique para acessar a câmera"
+        android:src="@android:drawable/ic_menu_camera" />
+
     <LinearLayout
         android:id="@+id/llCodigo"
         android:layout_width="match_parent"
@@ -26,7 +33,7 @@
             android:textSize="34sp" />
 
         <ImageView
-            android:id="@+id/ivBuscar"
+            android:id="@+id/btnBuscar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="fill_vertical"
@@ -34,16 +41,8 @@
             android:layout_marginEnd="8dp"
             android:layout_weight="3"
             android:src="@android:drawable/ic_menu_search"
-            android:visibility="gone"
+            android:visibility="visible"
             app:srcCompat="@android:drawable/ic_menu_search" />
-
-        <ImageButton
-            android:id="@+id/imageButton"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="3"
-            android:contentDescription="Clique para acessar a câmera"
-            android:src="@android:drawable/ic_menu_camera" />
 
     </LinearLayout>
 
@@ -162,7 +161,8 @@
             android:ems="10"
             android:enabled="false"
             android:hint="Latitude"
-            android:inputType="number|numberDecimal" />
+            android:inputType="number|numberDecimal"
+            android:textAlignment="textEnd" />
 
         <EditText
             android:id="@+id/etLongitude"
@@ -172,19 +172,40 @@
             android:ems="10"
             android:enabled="false"
             android:hint="Longitude"
-            android:inputType="number|numberDecimal" />
+            android:inputType="number|numberDecimal"
+            android:textAlignment="textEnd" />
 
     </LinearLayout>
 
-    <Button
-        android:id="@+id/btnSalvar"
+    <LinearLayout
+        android:id="@+id/llComandosLeitura"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        android:text="Salvar"
-        android:textSize="32sp" />
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnLimpar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_weight="1"
+            android:backgroundTint="@color/gray"
+            android:text="Limpar"
+            android:textSize="32sp" />
+
+        <Button
+            android:id="@+id/btnSalvar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_weight="1"
+            android:text="Salvar"
+            android:textSize="32sp" />
+    </LinearLayout>
 
 </LinearLayout>

@@ -58,16 +58,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         pedirPermissoesGPS();
 
-//        Item item = new Item();
-//        item.setCodigo("123");
-//        item.setDescricao("TESTE");
-//        item.setQuantidade(2.0);
-//        item.setUnidade("UN");
-//        bd.addItem(item);
-
-        //bd.getItem("1");
-
-
 
     }
 
